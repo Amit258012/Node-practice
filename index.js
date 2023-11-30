@@ -1,10 +1,10 @@
 const fs = require("fs");
 const http = require("http");
-const url = require("url");
+// const url = require("url");
 
-// Chapter: Files
+// Chapter [1]: Files
 
-// Topic (1): Blocking or Synchronous way
+// Topic (1.1): Blocking or Synchronous way
 /*
 const textIp = fs.readFileSync("./txt/input.txt", "utf-8");
 
@@ -18,7 +18,7 @@ fs.writeFileSync("./txt/input.txt", textOut);
 console.log("File updated");
 */
 
-// Topic (2): Non-Blocking or Asynchronous way
+// Topic (1.2): Non-Blocking or Asynchronous way
 
 /* fs.readFile("./txt/start.txt", "utf-8", (err, data1) => {
 	fs.readFile(`./txt/${data1}.txt`, "utf-8", (err, data2) => {
@@ -38,13 +38,36 @@ console.log("File updated");
 });
 console.log("Will read file"); */
 
-// Chapter: Server
+// Chapter [2]: Server
 
-// Topic (1): Creating server
+// Topic (2.1): Creating server
+// const server = http.createServer((req, res) => {
+// 	// console.log(req.url);
+// 	res.end("Hello Amit!");
+// });
+
+// server.listen(8000, "127.0.0.1", () => {
+// 	console.log("Listening on port 8000");
+// });
+
+// Topic (2.2): Routing
 const server = http.createServer((req, res) => {
-	res.end("Hello from the server!");
+	const pathName = req.url;
+	if (pathName === "/" || pathName === "/overview") {
+		res.end("This is overview Page");
+	} else if (pathName === "/product") {
+		res.end("List of all products");
+	} else {
+		res.writeHead(404, {
+			"Content-type": "text/html	",
+			"my-own-header": "I'm sending Meta data",
+		});
+		res.end(`<h1>page not found!</h1>`);
+	}
 });
 
 server.listen(8000, "127.0.0.1", () => {
-	console.log("Listening on port 8000");
+	console.log("Server is live at 8000");
 });
+
+// Topic (2.3):
