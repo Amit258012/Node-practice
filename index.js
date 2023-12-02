@@ -1,6 +1,8 @@
 const fs = require("fs");
 const http = require("http");
 const url = require("url");
+
+const slugify = require("slugify");
 const replaceTemplate = require("./utils/replaceTemplate");
 
 // Chapter [1]: Files
@@ -110,6 +112,13 @@ const tempProduct = fs.readFileSync(
 );
 const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, "utf-8");
 const productsData = JSON.parse(data);
+
+const slugs = productsData.map((el) =>
+	slugify(el.productName, { lower: true })
+);
+console.log(slugs);
+
+// server
 const server = http.createServer((req, res) => {
 	urlObj = JSON.parse(JSON.stringify(url.parse(req.url, true)));
 	const { query, pathname } = urlObj;
@@ -149,3 +158,25 @@ const server = http.createServer((req, res) => {
 server.listen(8000, "127.0.0.1", () => {
 	console.log("Server is live at 8000");
 });
+
+// Chapter [4]: npm cmds
+
+//  Topics [4.1]: Important commands
+
+/* 
+	Initialize node_modules : npm init
+
+	Install all node_modules from pacakge.json : npm i
+
+	Install npm package : npm i <package> -g(optional)
+
+	Install npm Package only for development (dev-dependencies) : npm i <package> --save-dev
+
+	Install specific version : npm i <package>@1.0.0
+
+	check for outdated packages : npm outdated
+
+	Update npm package : npm update <package>
+
+	Delete packages : npm uninstall <package>
+*/

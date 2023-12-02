@@ -1,5 +1,18 @@
 {
-  "dependencies": {
-    "prompt-sync": "^4.2.0"
-  }
+	"dependencies": {
+		"prompt-sync": "^4.2.0",
+		"slugify": "^1.6.6"
+	},
+	"name": "node-farm",
+	"description": "practicing nodejs",
+	"version": "1.0.0",
+	"main": "index.js",
+	"scripts": {
+		"start": "nodemon index.js"
+	},
+	"author": "Amit Jahagirdar",
+	"license": "ISC",
+	"devDependencies": {
+		"nodemon": "^3.0.2"
+	}
 }
