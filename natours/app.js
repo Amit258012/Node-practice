@@ -1,9 +1,14 @@
-const express = require("express");
 const fs = require("fs");
+const express = require("express");
+const morgan = require("morgan");
+
 const app = express();
 
+// Chapter: Middleware
 // url notaion
 // "/api/v1/tours/:page/:optional?"
+
+app.use(morgan("dev"));
 
 // Notes:- Middle ware => express.json()
 app.use(express.json());
@@ -11,6 +16,16 @@ const tours = JSON.parse(
 	fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
 );
 
+// Notes : Create own Middleware
+// It will log for every rout because the route are defined later
+app.use((req, res, next) => {
+	console.log("Hello from MiddleWare😁");
+	next();
+});
+
+// Chapter: Route Handlers
+
+// [ ]: Tour Route Functions
 // Topic: Handle Get requests
 
 const getAllTours = (req, res) => {
@@ -25,8 +40,6 @@ const getAllTours = (req, res) => {
 //  Topic: Getting specific tour
 
 const getTour = (req, res) => {
-	console.log(req.params);
-
 	const id = req.params.id * 1;
 	const tour = tours.find((el) => el.id === id);
 
@@ -93,6 +106,41 @@ const deleteTour = (req, res) => {
 	});
 };
 
+// [ ]: User route Functions
+
+const getAllUsers = (req, res) => {
+	res.status(500).json({
+		status: "error",
+		message: "This is not yet implemented",
+	});
+};
+const getUser = (req, res) => {
+	res.status(500).json({
+		status: "error",
+		message: "This is not yet implemented",
+	});
+};
+const createUser = (req, res) => {
+	res.status(500).json({
+		status: "error",
+		message: "This is not yet implemented",
+	});
+};
+const updateUser = (req, res) => {
+	res.status(500).json({
+		status: "error",
+		message: "This is not yet implemented",
+	});
+};
+const deleteUser = (req, res) => {
+	res.status(500).json({
+		status: "error",
+		message: "This is not yet implemented",
+	});
+};
+
+// Chapter: Routing
+
 // app.get("/api/v1/tours", getAllTours);
 // app.get("/api/v1/tours/:id", getTour);
 // app.post("/api/v1/tours", createTour);
@@ -101,6 +149,7 @@ const deleteTour = (req, res) => {
 
 // Notes: Best Routing Practice
 
+// [ ]: Tour Routes
 app.route("/api/v1/tours").get(getAllTours).post(createTour);
 
 app.route("/api/v1/tours/:id")
@@ -108,6 +157,22 @@ app.route("/api/v1/tours/:id")
 	.patch(updateTour)
 	.delete(deleteTour);
 
+//  [ ]: User Routes
+app.route("/api/v1/users").get(getAllUsers).post(createUser);
+
+app.route("/api/v1/users/:id")
+	.get(getUser)
+	.patch(updateUser)
+	.delete(deleteUser);
+
+// Notes : Create Middleware
+// It will not log when previous route are requested because the route are defined before
+// app.use((req, res, next) => {
+// 	console.log("Hello from MiddleWare😁");
+// 	next();
+// });
+
+// Chapter: Starting Server
 const port = 8000;
 app.listen(port, () => {
 	console.log(`Server running on http://localhost:${port}....`);
