@@ -68,6 +68,37 @@ app.post("/api/v1/tours", (req, res) => {
 	);
 });
 
+// Topic: Handle Patch requests (Update)
+app.patch("/api/v1/tours/:id", (req, res) => {
+	const id = req.params.id * 1;
+
+	const tour = tours.find((el) => el.id === id);
+	const updatedTour = req.body;
+
+	if (id > tours.length) {
+		return res.status(404).json({ status: "fail", message: "Invalid Id" });
+	}
+	res.status(200).json({
+		status: "Success",
+		data: {
+			tour: { ...tour, ...updatedTour },
+		},
+	});
+});
+
+// Topic: Handle Delete requests
+app.delete("/api/v1/tours/:id", (req, res) => {
+	const id = req.params.id * 1;
+
+	if (id > tours.length) {
+		return res.status(404).json({ status: "fail", message: "Invalid Id" });
+	}
+	res.status(204).json({
+		status: "Success",
+		data: null,
+	});
+});
+
 const port = 8000;
 app.listen(port, () => {
 	console.log(`Server running on http://localhost:${port}....`);
