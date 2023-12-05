@@ -14,6 +14,14 @@ const checkId = (req, res, next, val) => {
 	next();
 };
 
+// Create Checkbody middleware
+const checkBody = (req, res, next) => {
+	if (!(req.body && req.body.name && req.body.price)) {
+		return res.status(400).json({ error: "Missing Name or Price" });
+	}
+	next();
+};
+
 // Chapter: Route Handlers
 
 // Topic: Handle Get requests
@@ -90,4 +98,5 @@ module.exports = {
 	updateTour,
 	deleteTour,
 	checkId,
+	checkBody,
 };
