@@ -15,6 +15,9 @@ app.use(morgan("dev"));
 // Notes:- Middle ware => express.json()
 app.use(express.json());
 
+// serve the static files
+app.use(express.static(`${__dirname}/public`));
+
 // Notes : Create own Middleware
 // It will log for every rout because the route are defined later
 app.use((req, res, next) => {
