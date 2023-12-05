@@ -10,7 +10,9 @@ const app = express();
 // url notaion
 // "/api/v1/tours/:page/:optional?"
 
-app.use(morgan("dev"));
+if (process.env.NODE_ENV === "development") {
+	app.use(morgan("dev"));
+}
 
 // Notes:- Middle ware => express.json()
 app.use(express.json());
@@ -20,10 +22,10 @@ app.use(express.static(`${__dirname}/public`));
 
 // Notes : Create own Middleware
 // It will log for every rout because the route are defined later
-app.use((req, res, next) => {
-	console.log("Hello from MiddleWare😁");
-	next();
-});
+// app.use((req, res, next) => {
+// 	console.log("Hello from MiddleWare😁");
+// 	next();
+// });
 
 // Chapter: Routing
 
