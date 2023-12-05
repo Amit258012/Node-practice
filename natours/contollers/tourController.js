@@ -4,7 +4,7 @@ const tours = JSON.parse(
 	fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
 );
 
-const checkId = (req, res, next, val) => {
+const checkId = (req, res, next) => {
 	const id = req.params.id * 1;
 	const tour = tours.find((el) => el.id === id);
 
