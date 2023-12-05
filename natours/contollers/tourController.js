@@ -4,6 +4,16 @@ const tours = JSON.parse(
 	fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
 );
 
+const checkId = (req, res, next, val) => {
+	const id = req.params.id * 1;
+	const tour = tours.find((el) => el.id === id);
+
+	if (!tour) {
+		return res.status(404).json({ status: "fail", message: "Invalid Id" });
+	}
+	next();
+};
+
 // Chapter: Route Handlers
 
 // Topic: Handle Get requests
@@ -22,11 +32,6 @@ const getAllTours = (req, res) => {
 const getTour = (req, res) => {
 	const id = req.params.id * 1;
 	const tour = tours.find((el) => el.id === id);
-
-	if (!tour) {
-		return res.status(404).json({ status: "fail", message: "Invalid Id" });
-	}
-
 	res.status(200).json({
 		status: "success",
 		data: {
@@ -62,9 +67,6 @@ const updateTour = (req, res) => {
 	const tour = tours.find((el) => el.id === id);
 	const updatedTour = req.body;
 
-	if (id > tours.length) {
-		return res.status(404).json({ status: "fail", message: "Invalid Id" });
-	}
 	res.status(200).json({
 		status: "Success",
 		data: {
@@ -75,15 +77,17 @@ const updateTour = (req, res) => {
 
 // Topic: Handle Delete requests
 const deleteTour = (req, res) => {
-	const id = req.params.id * 1;
-
-	if (id > tours.length) {
-		return res.status(404).json({ status: "fail", message: "Invalid Id" });
-	}
 	res.status(204).json({
 		status: "Success",
 		data: null,
 	});
 };
 
-module.exports = { getAllTours, getTour, createTour, updateTour, deleteTour };
+module.exports = {
+	getAllTours,
+	getTour,
+	createTour,
+	updateTour,
+	deleteTour,
+	checkId,
+};
