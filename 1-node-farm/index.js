@@ -116,7 +116,7 @@ const productsData = JSON.parse(data);
 const slugs = productsData.map((el) =>
 	slugify(el.productName, { lower: true })
 );
-console.log(slugs);
+console.log("slug:  ", slugs);
 
 // server
 const server = http.createServer((req, res) => {
