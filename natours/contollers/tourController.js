@@ -1,4 +1,5 @@
 const Tour = require("../models/tourModel");
+const APIFeatures = require("../utils/apiFeatures");
 
 // const tours = JSON.parse(
 // 	fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
@@ -26,9 +27,23 @@ const Tour = require("../models/tourModel");
 
 // Topic: Handle Get requests
 
+const aliasTopTours = (req, res, next) => {
+	req.query.limit = "5";
+	req.query.sort = "-ratingAverage,price";
+	req.query.fields = "name,price,ratingAvarage,summary,difficulty";
+	next();
+};
+
 const getAllTours = async (req, res) => {
 	try {
-		const tours = await Tour.find();
+		const features = new APIFeatures(Tour.find(), req.query)
+			.filter()
+			.sort()
+			.limitFields()
+			.paginate();
+
+		const tours = await features.query;
+
 		res.status(200).json({
 			status: "success",
 			results: tours.length,
@@ -161,4 +176,5 @@ module.exports = {
 	createTour,
 	updateTour,
 	deleteTour,
+	aliasTopTours,
 };
