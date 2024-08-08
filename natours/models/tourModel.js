@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const slugify = require("slugify");
 // Mongoose Model
 // tour model (blue print)
 const tourSchema = new mongoose.Schema(
@@ -67,6 +68,17 @@ const tourSchema = new mongoose.Schema(
 tourSchema.virtual("durationWeeks").get(function () {
 	return this.duration / 7;
 });
+
+// Document Middleware
+// It runs before save and create cmd
+tourSchema.pre("save", function (next) {
+	this.slug = slugify(this.name, { lower: true });
+	next();
+});
+// tourSchema.post("save", function (doc, next) {
+// 	console.log(doc);
+// 	next();
+// });
 
 // create model using schema
 const Tour = mongoose.model("Tour", tourSchema);
