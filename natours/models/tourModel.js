@@ -58,6 +58,10 @@ const tourSchema = new mongoose.Schema(
 		startDates: {
 			type: [Date],
 		},
+		secretTour: {
+			type: Boolean,
+			default: false,
+		},
 	},
 	{
 		toJSON: { virtuals: true },
@@ -65,12 +69,14 @@ const tourSchema = new mongoose.Schema(
 	}
 );
 
+//  If you can easliy derive tthen dont store use virtual, you cannot use in query because we are not storing the virtual data just returning it
+
 tourSchema.virtual("durationWeeks").get(function () {
 	return this.duration / 7;
 });
 
 // Document Middleware
-// It runs before save and create cmd
+// It runs before .save() and .create()
 tourSchema.pre("save", function (next) {
 	this.slug = slugify(this.name, { lower: true });
 	next();
@@ -79,6 +85,19 @@ tourSchema.pre("save", function (next) {
 // 	console.log(doc);
 // 	next();
 // });
+
+//  Query Middleware
+// all string start with find => apply for find and findOne
+// this points to query
+tourSchema.pre(/^find/, function (next) {
+	this.find({ secretTour: { $ne: true } });
+	this.start = Date.now();
+	next();
+});
+tourSchema.post(/^find/, function (docs, next) {
+	console.log(`Query took ${Date.now() - this.start} milliseconds!`);
+	next();
+});
 
 // create model using schema
 const Tour = mongoose.model("Tour", tourSchema);
