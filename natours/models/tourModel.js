@@ -8,6 +8,7 @@ const tourSchema = new mongoose.Schema(
 			type: String,
 			required: [true, "A tour must have a name"],
 			unique: true,
+			trim: true,
 		},
 		duration: {
 			type: Number,
@@ -96,6 +97,15 @@ tourSchema.pre(/^find/, function (next) {
 });
 tourSchema.post(/^find/, function (docs, next) {
 	console.log(`Query took ${Date.now() - this.start} milliseconds!`);
+	next();
+});
+
+// Aggregation Middleware
+// this points to current aggregation object
+tourSchema.pre("aggregate", function (next) {
+	this.pipeline().unshift({
+		$match: { secretTour: { $ne: true } },
+	});
 	next();
 });
 
