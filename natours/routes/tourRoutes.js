@@ -8,7 +8,7 @@ const {
 	deleteTour,
 	getTourStats,
 	getMonthlyPlan,
-} = require("../contollers/tourController");
+} = require("../controllers/tourController");
 const router = express.Router();
 
 // [ ]: Tour Route Functions
