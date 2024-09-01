@@ -95,7 +95,7 @@ const tourSchema = new mongoose.Schema(
 	}
 );
 
-//  If you can easliy derive tthen dont store use virtual, you cannot use in query because we are not storing the virtual data just returning it
+//  If you can easliy derive then dont store use virtual, you cannot use in query because we are not storing the virtual data just returning it
 
 tourSchema.virtual("durationWeeks").get(function () {
 	return this.duration / 7;

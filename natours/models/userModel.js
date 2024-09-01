@@ -51,7 +51,7 @@ userSchema.pre("save", async function (next) {
 	if (!this.isModified("password")) return next();
 
 	// hash the password in asyncronus version
-	this.password = await bcrypt.hash(this.password, 12);
+	this.password = await bcrypt.hash(this.password, 10);
 
 	// Delete passwordConfirm first
 	this.passwordConfirm = undefined;
