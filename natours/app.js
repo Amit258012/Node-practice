@@ -1,5 +1,10 @@
 const express = require("express");
 const morgan = require("morgan"); // HTTP request logger middleware
+const rateLimit = require("express-rate-limit");
+const helmet = require("helmet");
+const mongoSanitize = require("express-mongo-sanitize");
+const xss = require("xss-clean");
+const hpp = require("hpp");
 
 const AppError = require("./utils/appError");
 const globalErrorHandler = require("./controllers/errorController");
@@ -8,17 +13,35 @@ const userRouter = require("./routes/userRoutes");
 
 const app = express();
 
+// Set security HTTP headers
+app.use(helmet());
+
 // Chapter: Middleware
 // url notaion
 // "/api/v1/tours/:page/:optional?"
 
+// Development logging
 if (process.env.NODE_ENV === "development") {
 	app.use(morgan("dev"));
 }
 
+// Limit requests from same API
+const limiter = rateLimit({
+	max: 100, // 100 requests / hr
+	windowMs: 60 * 60 * 1000,
+	message: "Too many requests from this IP, please try again in an hour!",
+});
+app.use("/api", limiter);
+
 // Notes:- Middle ware => express.json()
 // used for parsing incoming requests with JSON payload
-app.use(express.json());
+// body parser, reading data from body into req.body
+app.use(express.json({ limit: "10kb" }));
+
+// Data sanitization against NoSQL query injection
+app.use(mongoSanitize());
+// Data sanitization against XSS
+app.use(xss());
 
 // serve the static files
 app.use(express.static(`${__dirname}/public`));
@@ -37,17 +60,22 @@ app.use("/api/v1/users", userRouter); //Middleware
 
 //  Handle wrong urls
 app.all("*", (req, res, next) => {
-	// res.status(404).json({
-	// 	status: "fail",
-	// 	message: ` Can't find ${req.originalUrl} on the server! `,
-	// });
-
-	// const err = new Error(` Can't find ${req.originalUrl} on the server! `);
-	// err.status = "fail";
-	// err.statusCode = 404;
-
 	next(new AppError(` Can't find ${req.originalUrl} on the server! `, 400));
 });
+
+// Prevent parameter pollution
+app.use(
+	hpp({
+		whitelist: [
+			"duration",
+			"ratingsQuantity",
+			"ratingsAverage",
+			"maxGroupSize",
+			"difficulty",
+			"price",
+		],
+	})
+);
 
 // Error handling Middleware
 app.use(globalErrorHandler);
