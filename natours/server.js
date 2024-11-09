@@ -19,19 +19,6 @@ mongoose.connect(DB).then(() => {
 	console.log("DB connection successful!");
 });
 
-// const testTour = new Tour({
-// 	name: "The Advent",
-// 	rating: 4,
-// 	price: 997,
-// });
-
-// testTour
-// 	.save()
-// 	.then((doc) => {
-// 		console.log(doc);
-// 	})
-// 	.catch((e) => console.log("Error:", e));
-
 // Starting Server
 const port = process.env.port || 8000;
 const server = app.listen(port, () => {

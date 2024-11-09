@@ -1,5 +1,5 @@
 const express = require("express");
-const morgan = require("morgan");
+const morgan = require("morgan"); // HTTP request logger middleware
 
 const AppError = require("./utils/appError");
 const globalErrorHandler = require("./controllers/errorController");
@@ -17,6 +17,7 @@ if (process.env.NODE_ENV === "development") {
 }
 
 // Notes:- Middle ware => express.json()
+// used for parsing incoming requests with JSON payload
 app.use(express.json());
 
 // serve the static files

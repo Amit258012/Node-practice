@@ -11,6 +11,7 @@ const {
 } = require("../controllers/tourController");
 const authController = require("../controllers/authController");
 
+
 const router = express.Router();
 
 // [ ]: Tour Route Functions
