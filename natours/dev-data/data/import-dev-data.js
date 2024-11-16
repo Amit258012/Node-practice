@@ -1,11 +1,10 @@
 const mongoose = require("mongoose");
 const dotEnv = require("dotenv");
-dotEnv.config({ path: "./../../config.env" });
+dotEnv.config({ path: "./config.env" });
 const fs = require("fs");
 const Tour = require("../../models/tourModel");
 
-// console.log(process.env);
-// console.log(process.env.DATABASE_PASSWORD);
+console.log(process.env.DATABASE);
 
 // Connecting to MongoDB
 const DB = process.env.DATABASE.replace(
@@ -22,9 +21,7 @@ mongoose
 	});
 
 // Read Json file
-const tours = JSON.parse(
-	fs.readFileSync(`${__dirname}/tours-simple.json`, "utf-8")
-);
+const tours = JSON.parse(fs.readFileSync(`${__dirname}/tours.json`, "utf-8"));
 
 // console.log(tours);
 
