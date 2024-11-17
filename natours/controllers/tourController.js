@@ -29,22 +29,22 @@ const factory = require("./handlerFactory");
 
 // Topic: Handle Get requests
 
-const aliasTopTours = (req, res, next) => {
+exports.aliasTopTours = (req, res, next) => {
 	req.query.limit = "5";
 	req.query.sort = "-ratingAverage,price";
 	req.query.fields = "name,price,ratingAvarage,summary,difficulty";
 	next();
 };
 
-const getAllTours = factory.getAll(Tour);
+exports.getAllTours = factory.getAll(Tour);
 
-const getTour = factory.getOne(Tour, { path: "reviews" });
-const createTour = factory.createOne(Tour);
-const updateTour = factory.updateOne(Tour);
-const deleteTour = factory.deleteOne(Tour);
+exports.getTour = factory.getOne(Tour, { path: "reviews" });
+exports.createTour = factory.createOne(Tour);
+exports.updateTour = factory.updateOne(Tour);
+exports.deleteTour = factory.deleteOne(Tour);
 
-const getTourStats = catchAsync(async (req, res, next) => {
-	const stats = await Tour.aggregate([
+exports.getTourStats = catchAsync(async (req, res, next) => {
+	exports.stats = await Tour.aggregate([
 		{
 			$match: { ratingAvarage: { $gte: 4.5 } },
 		},
@@ -72,8 +72,8 @@ const getTourStats = catchAsync(async (req, res, next) => {
 	});
 });
 
-const getMonthlyPlan = catchAsync(async (req, res, next) => {
-	const year = req.params.year * 1;
+exports.getMonthlyPlan = catchAsync(async (req, res, next) => {
+	exports.year = req.params.year * 1;
 	const plan = await Tour.aggregate([
 		{
 			$unwind: "$startDates", //spread the arr into single value
@@ -116,14 +116,3 @@ const getMonthlyPlan = catchAsync(async (req, res, next) => {
 		},
 	});
 });
-
-module.exports = {
-	getAllTours,
-	getTour,
-	createTour,
-	updateTour,
-	deleteTour,
-	aliasTopTours,
-	getTourStats,
-	getMonthlyPlan,
-};
