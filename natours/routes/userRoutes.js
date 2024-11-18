@@ -7,41 +7,28 @@ const router = express.Router();
 
 router.post("/signup", authController.signup);
 router.post("/login", authController.login);
-
 router.post("/forgotPassword", authController.forgotPassword);
-router.patch(
-	"/updateMyPassword/",
-	authController.protect,
-	authController.updatePassword
-);
+router.patch("/resetPassword/:token", authController.resetPassword);
 
-router.patch("/updateMe", authController.protect, userController.updateMe);
-router.delete("/deleteMe", authController.protect, userController.deleteMe);
+//  After this middleware/Line, all the routes will be protected
+router.use(authController.protect);
 
-router.get(
-	"/me",
-	authController.protect,
-	userController.getMe,
-	userController.getUser
-);
+router.patch("/updateMyPassword/", authController.updatePassword);
+router.get("/me", userController.getMe, userController.getUser);
+router.patch("/updateMe", userController.updateMe);
+router.delete("/deleteMe", userController.deleteMe);
+
+router.use(authController.restrictTo("admin"));
 
 router
 	.route("/")
-	.get(
-		authController.protect,
-		authController.restrictTo("admin", "lead-guide", "guide"),
-		userController.getAllUsers
-	)
+	.get(userController.getAllUsers)
 	.post(userController.createUser);
 
 router
 	.route("/:id")
-	.get(
-		authController.protect,
-		authController.restrictTo("admin", "lead-guide", "guide"),
-		userController.getUser
-	)
-	.patch(authController.protect, userController.updateUser)
-	.delete(authController.protect, userController.deleteUser);
+	.get(userController.getUser)
+	.patch(userController.updateUser)
+	.delete(userController.deleteUser);
 
 module.exports = router;
