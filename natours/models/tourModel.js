@@ -41,6 +41,7 @@ const tourSchema = new mongoose.Schema(
 			default: 4.5,
 			min: [1, "min rating must be 1.0"],
 			max: [5, "max rating must be below 5.0"],
+			set: (val) => Math.round(val * 10) / 10, // 4.6666666 => 46.666666 => 47 => 4.7
 		},
 		ratingsQuantity: {
 			type: Number,
@@ -126,6 +127,12 @@ const tourSchema = new mongoose.Schema(
 	}
 );
 
+// Indexing
+// tourSchema.index({ price: 1 }); //ascending order also delete from database
+tourSchema.index({ price: 1, ratingAvarage: -1 });
+tourSchema.index({ slug: 1 });
+tourSchema.index({ startLocation: "2dsphere" });
+
 //  If you can easliy derive then dont store use virtual, you cannot use in query because we are not storing the virtual data just returning it
 
 tourSchema.virtual("durationWeeks").get(function () {
@@ -184,12 +191,12 @@ tourSchema.post(/^find/, function (docs, next) {
 
 // Aggregation Middleware
 // this points to current aggregation object
-tourSchema.pre("aggregate", function (next) {
-	this.pipeline().unshift({
-		$match: { secretTour: { $ne: true } },
-	});
-	next();
-});
+// tourSchema.pre("aggregate", function (next) {
+// 	this.pipeline().unshift({
+// 		$match: { secretTour: { $ne: true } },
+// 	});
+// 	next();
+// });
 
 // create model using schema
 const Tour = mongoose.model("Tour", tourSchema);
