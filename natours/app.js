@@ -1,3 +1,4 @@
+const path = require("path");
 const express = require("express");
 const morgan = require("morgan"); // HTTP request logger middleware
 const rateLimit = require("express-rate-limit");
@@ -13,6 +14,9 @@ const userRouter = require("./routes/userRoutes");
 const reviewRouter = require("./routes/reviewRoutes");
 
 const app = express();
+
+app.set("view engine", "pug");
+app.set("views", path.join(__dirname, "views"));
 
 // Set security HTTP headers
 app.use(helmet());
@@ -45,7 +49,7 @@ app.use(mongoSanitize());
 app.use(xss());
 
 // serve the static files
-app.use(express.static(`${__dirname}/public`));
+app.use(express.static(path.join(__dirname, "public")));
 
 // Notes : Create own Middleware
 // It will log for every rout because the route are defined later
@@ -55,6 +59,22 @@ app.use(express.static(`${__dirname}/public`));
 // });
 
 // Chapter: Routing
+
+app.get("/", (req, res) => {
+	res.status(200).render("base");
+});
+
+app.get("/overview", (req, res) => {
+	res.status(200).render("overview", {
+		title: "All Tours",
+	});
+});
+
+app.get("/tour", (req, res) => {
+	res.status(200).render("tour", {
+		title: "Ayodhya Tour",
+	});
+});
 
 app.use("/api/v1/tours", tourRouter); //Middleware
 app.use("/api/v1/users", userRouter); //Middleware
