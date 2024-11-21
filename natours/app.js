@@ -12,6 +12,7 @@ const globalErrorHandler = require("./controllers/errorController");
 const tourRouter = require("./routes/tourRoutes");
 const userRouter = require("./routes/userRoutes");
 const reviewRouter = require("./routes/reviewRoutes");
+const viewRouter = require("./routes/viewRoutes");
 
 const app = express();
 
@@ -60,22 +61,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // Chapter: Routing
 
-app.get("/", (req, res) => {
-	res.status(200).render("base");
-});
-
-app.get("/overview", (req, res) => {
-	res.status(200).render("overview", {
-		title: "All Tours",
-	});
-});
-
-app.get("/tour", (req, res) => {
-	res.status(200).render("tour", {
-		title: "Ayodhya Tour",
-	});
-});
-
+app.use("/", viewRouter);
 app.use("/api/v1/tours", tourRouter); //Middleware
 app.use("/api/v1/users", userRouter); //Middleware
 app.use("/api/v1/reviews", reviewRouter); //Middleware
