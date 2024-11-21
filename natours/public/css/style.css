@@ -465,6 +465,7 @@ body {
 	margin-bottom: 7rem;
 }
 .overview-box__detail {
+	margin-top: 1.5rem;
 	font-size: 1.5rem;
 	display: -webkit-box;
 	display: -ms-flexbox;
@@ -490,9 +491,11 @@ body {
 	margin-right: 2.25rem;
 	text-transform: uppercase;
 	font-size: 1.4rem;
+	color: #777;
 }
 .overview-box__text {
 	text-transform: capitalize;
+	color: #999;
 }
 .overview-box__img {
 	border-radius: 50%;
