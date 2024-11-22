@@ -562,11 +562,11 @@ body {
 	cursor: pointer;
 }
 
-.mapboxgl-popup {
+.maplibregl-popup {
 	max-width: 25rem;
 }
 
-.mapboxgl-popup-content {
+.maplibregl-popup-content {
 	text-align: center;
 	font-family: "Lato", sans-serif;
 	padding: 1.5rem !important;

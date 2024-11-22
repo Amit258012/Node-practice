@@ -3,8 +3,10 @@ extends base
 include _overviewBox
 include _reviewCard
 
-
-
+block append head 
+    link(href= 'https://unpkg.com/maplibre-gl@^4.7.1/dist/maplibre-gl.css' rel='stylesheet')
+    script(src= 'https://unpkg.com/maplibre-gl@^4.7.1/dist/maplibre-gl.js' defer)
+    script(type='module' src='/js/maplibre.js' defer)
 
 block content 
     section.section-header
@@ -63,7 +65,7 @@ block content
         
 
     section.section-map
-        #map
+        #map(data-locations=`${JSON.stringify(tour.locations)}`)
 
     section.section-reviews
         .reviews
