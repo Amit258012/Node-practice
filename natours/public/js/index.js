@@ -1,10 +1,11 @@
 // index.js
-import { login } from "./login.js";
+import { login, logout } from "./login.js";
 import { displayMap } from "./maplibre.js";
 
 // Parse the locations data from the dataset
 const mapBox = document.getElementById("map");
 const loginForm = document.querySelector(".form");
+const logOutBtn = document.querySelector(".nav__el--logout");
 
 if (mapBox) {
 	try {
@@ -25,5 +26,12 @@ if (loginForm) {
 		const email = document.getElementById("email").value;
 		const password = document.getElementById("password").value;
 		login(email, password);
+	});
+}
+
+if (logOutBtn) {
+	logOutBtn.addEventListener("click", (e) => {
+		e.preventDefault();
+		logout();
 	});
 }
