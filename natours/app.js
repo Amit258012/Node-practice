@@ -6,6 +6,7 @@ const helmet = require("helmet");
 const mongoSanitize = require("express-mongo-sanitize");
 const xss = require("xss-clean");
 const hpp = require("hpp");
+const cookieParser = require("cookie-parser");
 
 const AppError = require("./utils/appError");
 const globalErrorHandler = require("./controllers/errorController");
@@ -49,6 +50,8 @@ app.use(mongoSanitize());
 // Data sanitization against XSS
 app.use(xss());
 
+app.use(cookieParser());
+
 // serve the static files
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -64,7 +67,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use((req, res, next) => {
 	res.setHeader(
 		"Content-Security-Policy",
-		"script-src 'self' https://unpkg.com blob:; worker-src 'self' blob:;"
+		"script-src 'self' https://unpkg.com https://cdnjs.cloudflare.com blob:; worker-src 'self' blob:;"
 	);
 	next();
 });
