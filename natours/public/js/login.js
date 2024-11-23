@@ -14,12 +14,12 @@ export const login = async (email, password) => {
 			showAlert("success", "Logged in successfully!");
 			window.setTimeout(() => {
 				location.assign("/");
-			}, 1500);
+			}, 750);
 		} else {
 			showAlert("error", "Login failed. Please check your credentials.");
 		}
 	} catch (err) {
-		console.error(err.message);
+		showAlert("error", err.response.data.message);
 	}
 };
 
